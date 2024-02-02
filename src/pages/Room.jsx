@@ -17,17 +17,13 @@ const Room = () => {
         const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_ID_MESSAGES}.documents`, response => {
 
             if(response.events.includes("databases.*.collections.*.documents.*.create")){
-                console.log('A MESSAGE WAS CREATED')
                 setMessages(prevState => [response.payload, ...prevState])
             }
 
             if(response.events.includes("databases.*.collections.*.documents.*.delete")){
-                console.log('A MESSAGE WAS DELETED!!!')
                 setMessages(prevState => prevState.filter(message => message.$id !== response.payload.$id))
             }
         });
-
-        console.log('unsubscribe:', unsubscribe)
       
         return () => {
           unsubscribe();
@@ -44,13 +40,11 @@ const Room = () => {
                 Query.limit(100),
             ]
         )
-        console.log(response.documents)
         setMessages(response.documents)
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('MESSAGE:', messageBody)
 
         const permissions = [
             Permission.write(Role.user(user.$id)),
@@ -69,8 +63,6 @@ const Room = () => {
                 payload,
                 permissions
             )
-
-        console.log('RESPONSE:', response)
 
         // setMessages(prevState => [response, ...prevState])
 
@@ -92,7 +84,7 @@ const Room = () => {
             <div>
                 <textarea 
                     required 
-                    maxlength="250"
+                    maxLength="250"
                     placeholder="Say something..." 
                     onChange={(e) => {setMessageBody(e.target.value)}}
                     value={messageBody}

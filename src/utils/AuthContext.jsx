@@ -19,14 +19,13 @@ export const AuthProvider = ({children}) => {
             let accountDetails = await account.get();
             setUser(accountDetails)
         }catch(error){
-            
+            console.error(error);
         }
         setLoading(false)
     }
 
     const handleUserLogin = async (e, credentials) => {
         e.preventDefault()
-        console.log('CREDS:', credentials)
 
         try{
             let response = await account.createEmailSession(credentials.email, credentials.password)
